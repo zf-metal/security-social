@@ -122,6 +122,8 @@ class LoginFacebookController extends AbstractActionController {
             foreach ($result->getMessages() as $mensaje) {
                 $this->flashMessenger()->addErrorMessage($mensaje);
             }
+        }else{
+            $this->flashMessenger()->addErrorMessage('No se aceptaron los permisos requeridos.');
         }
 
         return $this->redirect()->toRoute('zf-metal.user/login');
