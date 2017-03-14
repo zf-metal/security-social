@@ -71,10 +71,10 @@ class LoginFacebookController extends AbstractActionController {
     }
 
     public function loginAction() {
-        if(!$this->getModuleOptions()->getFacebookLogin()){
+        if (!$this->getModuleOptions()->getFacebookLogin()) {
             $this->redirect()->toRoute('home');
         }
-        
+
         $helper = $this->getFb()->getRedirectLoginHelper();
         $permisos = ['email'];
         $loginUrl = $helper->getLoginUrl('http://zend3.int/user/login-facebook-callback', $permisos);
@@ -83,10 +83,10 @@ class LoginFacebookController extends AbstractActionController {
     }
 
     public function loginCallbackAction() {
-        if(!$this->getModuleOptions()->getFacebookLogin()){
+        if (!$this->getModuleOptions()->getFacebookLogin()) {
             $this->redirect()->toRoute('home');
         }
-        
+
         $helper = $this->getFb()->getRedirectLoginHelper();
         try {
             $accessToken = $helper->getAccessToken();
@@ -122,6 +122,8 @@ class LoginFacebookController extends AbstractActionController {
                 $this->flashMessenger()->addErrorMessage($mensaje);
             }
         }
+
+        return $this->redirect()->toRoute('zf-metal.user/login');
     }
 
     public function logoutFacebook() {
