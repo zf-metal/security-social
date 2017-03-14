@@ -77,7 +77,8 @@ class LoginFacebookController extends AbstractActionController {
 
         $helper = $this->getFb()->getRedirectLoginHelper();
         $permisos = ['email'];
-        $loginUrl = $helper->getLoginUrl('http://zend3.int/user/login-facebook-callback', $permisos);
+        $url = $this->url()->fromRoute('zf-metal.user-fb/login_callback', [], ['force_canonical'=>true]);
+        $loginUrl = $helper->getLoginUrl($url, $permisos);
 
         $this->redirect()->toUrl($loginUrl);
     }
