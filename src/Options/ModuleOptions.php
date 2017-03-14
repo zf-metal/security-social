@@ -7,6 +7,10 @@ use Zend\Stdlib\AbstractOptions;
  */
 class ModuleOptions extends AbstractOptions
 {
+    /**
+     * @var boolean
+     */
+    private $facebookLogin;
 
     /**
      * Constructor
@@ -16,5 +20,22 @@ class ModuleOptions extends AbstractOptions
         $this->__strictMode__ = false;
         parent::__construct($options);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFacebookLogin()
+    {
+        return $this->facebookLogin;
+    }
+
+    /**
+     * @param mixed $facebookLogin
+     */
+    public function setFacebookLogin($facebookLogin)
+    {
+        $this->facebookLogin = $facebookLogin;
+    }
+
 
 }
