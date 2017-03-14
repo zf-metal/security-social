@@ -30,7 +30,7 @@ return [
                             'route' => '/login-facebook-callback',
                             'defaults' => [
                                 'controller' => Controller\LoginFacebookController::class,
-                                'action' => 'logout'
+                                'action' => 'login-callback'
                             ]
                         ]
                     ],

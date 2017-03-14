@@ -1,0 +1,77 @@
+<?php
+$this->notyFlash(true);
+?>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <?php echo $this->form()->openTag($form) ?>
+        <legend>Login</legend>
+        <!--<h4>Por favor completa el siguiente formulario.</h4>-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <?php $element = $form->get('_username'); ?>
+                <label> <?php echo $element->getOption('label'); ?> </label>
+                <?php echo $this->formElement($element); ?>
+                <?php if ($element->getOption('description')): ?>
+                               <p class="help-block"><?php echo $this->element->getOption('description') ?></p>
+                           <?php endif; ?>
+                <?php if ($this->formElementErrors($this->element)) : ?>
+                    <?php
+                    echo $this->formElementErrors()
+                        ->setMessageOpenFormat('<span class="help-block">')
+                        ->setMessageSeparatorString('</span><span class="help-block">')
+                        ->setMessageCloseString('</span>')
+                        ->render($element);
+                    ?>
+
+                           <?php endif; ?>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <?php $element = $form->get('_password'); ?>
+                <label> <?php echo $element->getOption('label'); ?> </label>
+                <?php
+                echo $this->formElement($element);
+                ?>
+                <?php if ($element->getOption('description')): ?>
+                               <p class="help-block"><?php echo $this->element->getOption('description') ?></p>
+                           <?php endif; ?>
+                <?php if ($this->formElementErrors($this->element)) : ?>
+                    <?php
+                    echo $this->formElementErrors()
+                        ->setMessageOpenFormat('<span class="help-block">')
+                        ->setMessageSeparatorString('</span><span class="help-block">')
+                        ->setMessageCloseString('</span>')
+                        ->render($element);
+                    ?>
+                     <?php endif; ?>
+            </div>
+            <div class="col-xs-12 col-md-12 radio">
+                <?php echo $this->formElement($form->get('submit')); ?>
+            </div>
+        </div>
+
+        <?php echo $this->form()->closeTag($form); ?>
+        <?php if ($this->getModuleOptions()->getPublicRegister()): ?>
+            <p class="col-xs-12 col-md-12 radio text-center"> or </p>
+            <a href="<?= $this->url('zf-metal.user-fb/login'); ?>">
+                <div class="col-xs-12 col-md-12 radio btn btn-info">
+                    Login with Facebook
+                </div>
+            </a>
+        <?php endif ?>
+        <?php if ($this->getModuleOptions()->getPublicRegister()): ?>
+            <p class="col-xs-12 col-md-12 radio text-center"> or </p>
+            <a href="<?php echo $this->basePath('/user/register'); ?>">
+                <div class="col-xs-12 col-md-12 radio btn btn-success">
+                    Register
+                </div>
+            </a>
+        <?php endif ?>
+
+        <div class="col-xs-12 col-md-12 radio text-right">
+            <a href="<?php echo $this->basePath('/user/recovery'); ?>"> Password Recovery</a>
+        </div>
+
+    </div>
+
+</div>

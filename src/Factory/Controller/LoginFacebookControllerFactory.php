@@ -8,9 +8,11 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 class LoginFacebookControllerFactory implements FactoryInterface {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-        $authService = $container->get('zf-metal-security.authservice');
+        $config = $container->get('config');
+        $fb = new \Facebook\Facebook($config['facebook']);
         $moduleOptions = $container->get('zf-metal-security-social.options');
-        return new \ZfMetal\SecuritySocial\Controller\LoginFacebookController($authService, $moduleOptions);
+        $authService = $container->get('zf-metal-security.authservice-social');
+        return new \ZfMetal\SecuritySocial\Controller\LoginFacebookController($authService,$fb, $moduleOptions);
     }
 
 }
