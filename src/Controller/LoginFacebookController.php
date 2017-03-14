@@ -6,8 +6,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZfMetal\SecuritySocial\Options\ModuleOptions;
 
-class LoginFacebookController extends AbstractActionController
-{
+class LoginFacebookController extends AbstractActionController {
+
     /**
      *
      * @var \Zend\Authentication\AuthenticationService
@@ -29,8 +29,7 @@ class LoginFacebookController extends AbstractActionController
      * @param \Facebook\Facebook $fb
      * @param ModuleOptions $moduleOptions
      */
-    public function __construct(\Zend\Authentication\AuthenticationService $authService, \Facebook\Facebook $fb, ModuleOptions $moduleOptions)
-    {
+    public function __construct(\Zend\Authentication\AuthenticationService $authService, \Facebook\Facebook $fb, ModuleOptions $moduleOptions) {
         $this->authService = $authService;
         $this->fb = $fb;
         $this->moduleOptions = $moduleOptions;
@@ -39,45 +38,43 @@ class LoginFacebookController extends AbstractActionController
     /**
      * @return \Zend\Authentication\AuthenticationService
      */
-    public function getAuthService()
-    {
+    public function getAuthService() {
         return $this->authService;
     }
 
     /**
      * @return \Facebook\Facebook
      */
-    public function getFb()
-    {
+    public function getFb() {
         return $this->fb;
     }
 
     /**
      * @param \Facebook\Facebook $fb
      */
-    public function setFb($fb)
-    {
+    public function setFb($fb) {
         $this->fb = $fb;
     }
 
     /**
      * @return ModuleOptions
      */
-    public function getModuleOptions()
-    {
+    public function getModuleOptions() {
         return $this->moduleOptions;
     }
 
     /**
      * @param ModuleOptions $moduleOptions
      */
-    public function setModuleOptions($moduleOptions)
-    {
+    public function setModuleOptions($moduleOptions) {
         $this->moduleOptions = $moduleOptions;
     }
 
-    public function loginAction()
-    {
+    public function loginAction() {
+        if(!$this->getModuleOptions()->getFacebookLogin()){
+            $this->redirect()->toRoute('home');
+        }
+        
         $helper = $this->getFb()->getRedirectLoginHelper();
         $permisos = ['email'];
         $loginUrl = $helper->getLoginUrl('http://zend3.int/user/login-facebook-callback', $permisos);
@@ -85,8 +82,11 @@ class LoginFacebookController extends AbstractActionController
         $this->redirect()->toUrl($loginUrl);
     }
 
-    public function loginCallbackAction()
-    {
+    public function loginCallbackAction() {
+        if(!$this->getModuleOptions()->getFacebookLogin()){
+            $this->redirect()->toRoute('home');
+        }
+        
         $helper = $this->getFb()->getRedirectLoginHelper();
         try {
             $accessToken = $helper->getAccessToken();
@@ -101,15 +101,19 @@ class LoginFacebookController extends AbstractActionController
         }
 
         if ($accessToken) {
-            $this->getFb()->setDefaultAccessToken((string)$accessToken);
+            $this->getFb()->setDefaultAccessToken((string) $accessToken);
             $userData = $this->getFb()->get('/me?locale=en_US&fields=name,email', $accessToken)->getGraphGroup();
 
             $this->getAuthService()->getAdapter()->setUserData($userData);
             $result = $this->getAuthService()->authenticate();
 
             if ($result->getCode() == 1) {
-                foreach ($result->getMessages() as $mensaje) {
-                    $this->flashMessenger()->addSuccessMessage($mensaje);
+                if ($this->getSecurityOptions()->getRedirectStrategy()->getAppendPreviousUri()) {
+                    $uri = $this->getSecurityOptions()->getRedirectStrategy()->getPreviousUriQueryKey();
+                    if ($this->sessionManager()->has($uri)) {
+                        $route = $this->sessionManager()->getFlash($uri);
+                        return $this->redirect()->toRoute($route);
+                    }
                 }
                 return $this->redirect()->toRoute('home');
             }
@@ -120,8 +124,8 @@ class LoginFacebookController extends AbstractActionController
         }
     }
 
-    public function logoutFacebook()
-    {
+    public function logoutFacebook() {
         $this->getFb()->get('email');
     }
+
 }
