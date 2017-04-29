@@ -45,6 +45,17 @@ $this->notyFlash(true);
                     ?>
                      <?php endif; ?>
             </div>
+            <?php if ($this->getSecurityOptions()->getRememberMe()) : ?>
+                <div class="col-xs-12 col-md-12 checkbox-inline form-group">
+                    <?php $element = $form->get('_remember'); ?>
+
+                    <?php
+                    echo $this->formElement($element);
+                    ?>
+                    <label> <?php echo $element->getOption('label'); ?> </label>
+
+                </div>
+            <?php endif; ?>
             <div class="col-xs-12 col-md-12 radio">
                 <?php echo $this->formElement($form->get('submit')); ?>
             </div>
