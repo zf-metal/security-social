@@ -2,8 +2,8 @@
     "name": "zf-metal/security-social",
     "description": "Modulo de autenticación por medio de redes sociales para Framework 3",
     "type": "library",
-    "license": "BSD-3-Clause",
-    "version": "0.0.1",
+    "license": "MIT",
+    "version": "1.0.0",
     "homepage": "https://github.com/cincarnato",
     "keywords": [
         "zf3"
@@ -25,7 +25,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.6",
-        "zf-metal/security": "dev-master",
+        "zf-metal/security": "^1.0.0",
         "facebook/graph-sdk" : "~5.0"
     },
     "autoload": {
